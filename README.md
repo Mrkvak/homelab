@@ -6,7 +6,7 @@ this repository should contain most public stuff from my homleab projects. For n
 In the "3d" directory, you'll find .stl and .FCStd (FreeCAD) files for IO shield SC813 and B650D4U.
 
 ## Reverse engineering
-After I connected everything up, I've noticed PSU is not detected in either BMC web interface or `ipmitool sensors` command output. To me, it wasn't really understandable -  PMbus should be standardized, so what's the problem? But some people online encountered the same problem. (***FIXME*** - links)
+After I connected everything up, I've noticed PSU is not detected in either BMC web interface or `ipmitool sensors` command output. To me, it wasn't really understandable -  PMbus should be standardized, so what's the problem?
 So I've downloaded the latest BMC firmware from ASRock website and decided to update it - _maybe they fixed it in the last release_ I've thought. Well, my browser crashed after I selected firmware file, and the BMC controller become unresponsive since then. After an hour of googling, I managed to find socflash binary (even for Linux) that manages to flash the BMC firmware from the host via VGA MMIO registers. Yeah, that means CVE-2019-6260 is still not fixed - root access to the machine means full and unlimited access to the BMC controller, but it really helped me here.
 
 ### Hunting for backdoors
@@ -56,7 +56,7 @@ Now we can safely assume it assumes PMbus is on I2C bus #12 and it assumes PSU h
 60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 70: -- -- -- -- -- -- -- --
 ```
-I've even found reddit post (***FIXME***: link) mentioning the same addresses.  But changing these values in the .PRJ file doesn't make it work, though. The only obvious cause is this is just some C `#define` directives (or like) and they got baked in the code.
+I've even found reddit post (https://www.reddit.com/r/ASRock/comments/qq6s8n/pmbus_and_supermicro_pdb/) mentioning the same addresses.  But changing these values in the .PRJ file doesn't make it work, though. The only obvious cause is this is just some C `#define` directives (or like) and they got baked in the code.
 
 Few more finds and greps and I noticed there's a `pmbus` library and binary present on the system:
 ```
@@ -85,10 +85,13 @@ $ ~/B650D4U/extractions/B650D4U_6.09.00.ima.extracted $ find . |grep -i psu
 
 After disassembling, I saw suspicious symbol `psuaccessAddr` in `libpsuaccess.so` with hardcoded bytes 0x58 0x59, 0x5a, 0x5b, which are our addresses from .PRJ files bitshifted to right by one byte!
 So I decided to test it by regenerating squashfs image, replacing it in the .ima file and reflashing the firmware.
-And behold - I got real PSU data in web interface (***FIXME*** add screenshot)!
+And behold - I got real PSU data in web interface:
+![IPMI - PSU screenshot](/doc/ipmi-screenshot.png)
+Yes, ID, Model, Revision and Serial Number do not work, but who cares? I can read that on the label.
 
 However, `ipmitool sensor` command on the host still haven't returned anything usable. After spending some time looking into redis and decompiled backend Lua scripts I went through all running processes on the system, its dependencies, and I ended up at `libipmipar.so` loaded by `IPMIMain` binary, which had functions `dev_asrr_ast2600_v03_i2c_12_*` (with the suspicious *12*). These places were found in functions like `dev_asrrpsuvinv02_vin1_read` which set one of the fields in the passed parameter to `0xb0`, and function `dev_asrrpsuvinv02_vin2_read` that set the parameter to `0xb2`. Coincidence? I don't think so.
-Let's patch it then.. But for some reason I couldn't find 0xb0 anywhere in the code. It turns out the instruction that "generated" that 0xb0 value was was `mvn r3,#0x4f"` (opcode `4f 30 e0 e3`) - probably because of compiler optimization rather than deliberate obfuscation. Ghidra was huge help here. After I checked all occurrences of the opcode for false positives and replacing them with `87 30 e0 e3` (NOT of 0x3c shifted to left by one bit), and flashing the modified firmware I finally got PSU values both in the web UI and `ipmitool` output.
+Let's patch it then.. But for some reason I couldn't find 0xb0 anywhere in the code. It turns out the instruction that "generated" that 0xb0 value was was `mvn r3,#0x4f"` (opcode `4f 30 e0 e3`) - probably because of compiler optimization rather than deliberate obfuscation. Ghidra was huge help here. After I checked all occurrences of the opcode for false positives and replacing them with `87 30 e0 e3` (NOT of 0x3c shifted to left by one bit), and flashing the modified firmware I finally got PSU values both in the web UI and `ipmitool` output. And with the attached zabbix template (`zabbix-ipmi.yaml` and `zabbix-ipmi.conf`) I can now get those values in Zabbix as well. *** FIXME - add triggers ***
+![Zabbix - PSU screenshot](/doc/zabbix-screenshot.png)
 
 
 ## AI benchmark on socflash reimplementation

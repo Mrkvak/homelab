@@ -1,0 +1,485 @@
+zabbix_export:
+  version: '7.4'
+  template_groups:
+    - uuid: e960332b3f6c46a1956486d4f3f99fce
+      name: 'Templates/Server hardware'
+  templates:
+    - uuid: cbb1175cf1044e468e07394b0d89f297
+      template: 'B650D4U IPMI'
+      name: 'B650D4U IPMI'
+      groups:
+        - name: 'Templates/Server hardware'
+      items:
+        - uuid: cdff6e607dd34c3f851f72aeb8998a40
+          name: CUR_PSU1_IOUT
+          type: DEPENDENT
+          key: ipmi.cur_psu1_iout
+          history: 365d
+          value_type: FLOAT
+          units: A
+          preprocessing:
+            - type: REGEX
+              parameters:
+                - '(?m)^CUR_PSU1_IOUT\s*\|\s*([0-9]+(?:[.,][0-9]+)?)'
+                - \1
+            - type: STR_REPLACE
+              parameters:
+                - ','
+                - .
+          master_item:
+            key: ipmi.sensors
+        - uuid: e614596c80344caab674d395511aa021
+          name: FAN1_1
+          type: DEPENDENT
+          key: ipmi.fan_1_1
+          history: 365d
+          value_type: FLOAT
+          units: RPM
+          preprocessing:
+            - type: REGEX
+              parameters:
+                - '(?m)^FAN1_1\s*\|\s*([0-9]+(?:[.,][0-9]+)?)'
+                - \1
+            - type: STR_REPLACE
+              parameters:
+                - ','
+                - .
+          master_item:
+            key: ipmi.sensors
+        - uuid: 53fd0e85d0c84b069334c33cde36de1c
+          name: FAN2_1
+          type: DEPENDENT
+          key: ipmi.fan_2_1
+          history: 365d
+          value_type: FLOAT
+          units: RPM
+          preprocessing:
+            - type: REGEX
+              parameters:
+                - '(?m)^FAN2_1\s*\|\s*([0-9]+(?:[.,][0-9]+)?)'
+                - \1
+            - type: STR_REPLACE
+              parameters:
+                - ','
+                - .
+          master_item:
+            key: ipmi.sensors
+        - uuid: 495b9eba691a4715b1ad92e1701094e1
+          name: FAN6_1
+          type: DEPENDENT
+          key: ipmi.fan_6_1
+          history: 365d
+          value_type: FLOAT
+          units: RPM
+          preprocessing:
+            - type: REGEX
+              parameters:
+                - '(?m)^FAN6_1\s*\|\s*([0-9]+(?:[.,][0-9]+)?)'
+                - \1
+            - type: STR_REPLACE
+              parameters:
+                - ','
+                - .
+          master_item:
+            key: ipmi.sensors
+        - uuid: 0ab7bcbca37849f5b841025b7afb32dd
+          name: FAN7_1
+          type: DEPENDENT
+          key: ipmi.fan_7_1
+          history: 365d
+          value_type: FLOAT
+          units: RPM
+          preprocessing:
+            - type: REGEX
+              parameters:
+                - '(?m)^FAN7_1\s*\|\s*([0-9]+(?:[.,][0-9]+)?)'
+                - \1
+            - type: STR_REPLACE
+              parameters:
+                - ','
+                - .
+          master_item:
+            key: ipmi.sensors
+        - uuid: 1573784720e847cfa378fd40846e722b
+          name: FAN_PSU1
+          type: DEPENDENT
+          key: ipmi.fan_psu1
+          history: 365d
+          value_type: FLOAT
+          units: RPM
+          preprocessing:
+            - type: REGEX
+              parameters:
+                - '(?m)^FAN_PSU1\s*\|\s*([0-9]+(?:[.,][0-9]+)?)'
+                - \1
+            - type: STR_REPLACE
+              parameters:
+                - ','
+                - .
+          master_item:
+            key: ipmi.sensors
+        - uuid: 938a1d4a523749a1acafef752af807b2
+          name: PWR_PSU1_PIN
+          type: DEPENDENT
+          key: ipmi.pwr_psu1_pin
+          history: 365d
+          value_type: FLOAT
+          units: W
+          preprocessing:
+            - type: REGEX
+              parameters:
+                - '(?m)^PWR_PSU1_PIN\s*\|\s*([0-9]+(?:[.,][0-9]+)?)'
+                - \1
+            - type: STR_REPLACE
+              parameters:
+                - ','
+                - .
+          master_item:
+            key: ipmi.sensors
+        - uuid: a484c5b431d84176aa871c57bd6b8cde
+          name: PWR_PSU1_POUT
+          type: DEPENDENT
+          key: ipmi.pwr_psu1_pout
+          history: 365d
+          value_type: FLOAT
+          units: W
+          preprocessing:
+            - type: REGEX
+              parameters:
+                - '(?m)^PWR_PSU1_POUT\s*\|\s*([0-9]+(?:[.,][0-9]+)?)'
+                - \1
+            - type: STR_REPLACE
+              parameters:
+                - ','
+                - .
+          master_item:
+            key: ipmi.sensors
+        - uuid: 80433bfb8d2e44099d04362494dffd58
+          name: 'IPMI sensors'
+          key: ipmi.sensors
+          history: 365d
+          value_type: TEXT
+        - uuid: 6133bac494914a4ea76c2272d88563e7
+          name: TEMP_CARD_SIDE
+          type: DEPENDENT
+          key: ipmi.temp_card_side
+          history: 365d
+          value_type: FLOAT
+          units: ˚C
+          preprocessing:
+            - type: REGEX
+              parameters:
+                - '(?m)^TEMP_CARD_SIDE\s*\|\s*([0-9]+(?:[.,][0-9]+)?)'
+                - \1
+            - type: STR_REPLACE
+              parameters:
+                - ','
+                - .
+          master_item:
+            key: ipmi.sensors
+        - uuid: a63b92d32063465b8a84a447e98cbcd0
+          name: TEMP_CPU
+          type: DEPENDENT
+          key: ipmi.temp_cpu
+          history: 365d
+          value_type: FLOAT
+          units: ˚C
+          preprocessing:
+            - type: REGEX
+              parameters:
+                - '(?m)^TEMP_CPU\s*\|\s*([0-9]+(?:[.,][0-9]+)?)'
+                - \1
+            - type: STR_REPLACE
+              parameters:
+                - ','
+                - .
+          master_item:
+            key: ipmi.sensors
+        - uuid: cad34e7fbe5c412f97b6753d4e21982e
+          name: TEMP_FCH
+          type: DEPENDENT
+          key: ipmi.temp_fch
+          history: 365d
+          value_type: FLOAT
+          units: ˚C
+          preprocessing:
+            - type: REGEX
+              parameters:
+                - '(?m)^TEMP_FCH\s*\|\s*([0-9]+(?:[.,][0-9]+)?)'
+                - \1
+            - type: STR_REPLACE
+              parameters:
+                - ','
+                - .
+          master_item:
+            key: ipmi.sensors
+        - uuid: c5538b9c5f1a4d209c08a6d770cd1b47
+          name: TEMP_FSC_INDEX
+          type: DEPENDENT
+          key: ipmi.temp_fsc_index
+          history: 365d
+          value_type: FLOAT
+          units: ˚C
+          preprocessing:
+            - type: REGEX
+              parameters:
+                - '(?m)^FSC_INDEX\s*\|\s*([0-9]+(?:[.,][0-9]+)?)'
+                - \1
+            - type: STR_REPLACE
+              parameters:
+                - ','
+                - .
+          master_item:
+            key: ipmi.sensors
+        - uuid: 00d81ea31d6a41ebb0fcb1d2b0482a51
+          name: TEMP_MB
+          type: DEPENDENT
+          key: ipmi.temp_mb
+          history: 365d
+          value_type: FLOAT
+          units: ˚C
+          preprocessing:
+            - type: REGEX
+              parameters:
+                - '(?m)^TEMP_MB\s*\|\s*([0-9]+(?:[.,][0-9]+)?)'
+                - \1
+            - type: STR_REPLACE
+              parameters:
+                - ','
+                - .
+          master_item:
+            key: ipmi.sensors
+        - uuid: 00f876ffb69d44269c4353b737474d6d
+          name: VOLT_3V
+          type: DEPENDENT
+          key: ipmi.volt_3V
+          history: 365d
+          value_type: FLOAT
+          units: V
+          preprocessing:
+            - type: REGEX
+              parameters:
+                - '(?m)^VOLT_3V\s*\|\s*([0-9]+(?:[.,][0-9]+)?)'
+                - \1
+            - type: STR_REPLACE
+              parameters:
+                - ','
+                - .
+          master_item:
+            key: ipmi.sensors
+        - uuid: 5e649e36871f4b9cbd3ea1d4770a7716
+          name: VOLT_3VSB
+          type: DEPENDENT
+          key: ipmi.volt_3vsb
+          history: 365d
+          value_type: FLOAT
+          units: V
+          preprocessing:
+            - type: REGEX
+              parameters:
+                - '(?m)^VOLT_3VSB\s*\|\s*([0-9]+(?:[.,][0-9]+)?)'
+                - \1
+            - type: STR_REPLACE
+              parameters:
+                - ','
+                - .
+          master_item:
+            key: ipmi.sensors
+        - uuid: 5a4d89153fc94c0096872b06148db6d2
+          name: VOLT_5V
+          type: DEPENDENT
+          key: ipmi.volt_5V
+          history: 365d
+          value_type: FLOAT
+          units: V
+          preprocessing:
+            - type: REGEX
+              parameters:
+                - '(?m)^VOLT_5V\s*\|\s*([0-9]+(?:[.,][0-9]+)?)'
+                - \1
+            - type: STR_REPLACE
+              parameters:
+                - ','
+                - .
+          master_item:
+            key: ipmi.sensors
+        - uuid: a91f932b5f574081848a8f3f190ac6f8
+          name: VOLT_5VSB
+          type: DEPENDENT
+          key: ipmi.volt_5vsb
+          history: 365d
+          value_type: FLOAT
+          units: V
+          preprocessing:
+            - type: REGEX
+              parameters:
+                - '(?m)^VOLT_5VSB\s*\|\s*([0-9]+(?:[.,][0-9]+)?)'
+                - \1
+            - type: STR_REPLACE
+              parameters:
+                - ','
+                - .
+          master_item:
+            key: ipmi.sensors
+        - uuid: f2214049939e48319346d98e372240a9
+          name: VOLT_12V
+          type: DEPENDENT
+          key: ipmi.volt_12V
+          history: 365d
+          value_type: FLOAT
+          units: V
+          preprocessing:
+            - type: REGEX
+              parameters:
+                - '(?m)^VOLT_12V\s*\|\s*([0-9]+(?:[.,][0-9]+)?)'
+                - \1
+            - type: STR_REPLACE
+              parameters:
+                - ','
+                - .
+          master_item:
+            key: ipmi.sensors
+        - uuid: 11581365fe164a09a6eca00768d2f1eb
+          name: VOLT_1.8V_PT21
+          type: DEPENDENT
+          key: ipmi.volt_18v_pt21
+          history: 365d
+          value_type: FLOAT
+          units: V
+          preprocessing:
+            - type: REGEX
+              parameters:
+                - '(?m)^VOLT_1.8V_PT21\s*\|\s*([0-9]+(?:[.,][0-9]+)?)'
+                - \1
+            - type: STR_REPLACE
+              parameters:
+                - ','
+                - .
+          master_item:
+            key: ipmi.sensors
+        - uuid: 432ff41931b74e35b00ea47d52264b31
+          name: VOLT_BAT
+          type: DEPENDENT
+          key: ipmi.volt_bat
+          history: 365d
+          value_type: FLOAT
+          units: V
+          preprocessing:
+            - type: REGEX
+              parameters:
+                - '(?m)^VOLT_BAT\s*\|\s*([0-9]+(?:[.,][0-9]+)?)'
+                - \1
+            - type: STR_REPLACE
+              parameters:
+                - ','
+                - .
+          master_item:
+            key: ipmi.sensors
+        - uuid: eab2664c084547caa3fbd0e7d1774010
+          name: VOLT_P0_VCORE
+          type: DEPENDENT
+          key: ipmi.volt_p0_vcore
+          history: 365d
+          value_type: FLOAT
+          units: V
+          preprocessing:
+            - type: REGEX
+              parameters:
+                - '(?m)^VOLT_P0_VCORE\s*\|\s*([0-9]+(?:[.,][0-9]+)?)'
+                - \1
+            - type: STR_REPLACE
+              parameters:
+                - ','
+                - .
+          master_item:
+            key: ipmi.sensors
+        - uuid: b2781f60dc8d48f0ae7c13e7df0c9108
+          name: VOLT_P0_VSOC
+          type: DEPENDENT
+          key: ipmi.volt_p0_vsoc
+          history: 365d
+          value_type: FLOAT
+          units: V
+          preprocessing:
+            - type: REGEX
+              parameters:
+                - '(?m)^VOLT_P0_VSOC\s*\|\s*([0-9]+(?:[.,][0-9]+)?)'
+                - \1
+            - type: STR_REPLACE
+              parameters:
+                - ','
+                - .
+          master_item:
+            key: ipmi.sensors
+        - uuid: 9481da871e2f4ab7a21ca58c3df3f426
+          name: VOLT_PSU1_VIN
+          type: DEPENDENT
+          key: ipmi.volt_psu1_vin
+          history: 365d
+          value_type: FLOAT
+          units: V
+          preprocessing:
+            - type: REGEX
+              parameters:
+                - '(?m)^VOLT_PSU1_VIN\s*\|\s*([0-9]+(?:[.,][0-9]+)?)'
+                - \1
+            - type: STR_REPLACE
+              parameters:
+                - ','
+                - .
+          master_item:
+            key: ipmi.sensors
+        - uuid: bc1691e0a966480bb3ae40c9fd303420
+          name: VOLT_VDD10
+          type: DEPENDENT
+          key: ipmi.volt_vdd10
+          history: 365d
+          value_type: FLOAT
+          units: V
+          preprocessing:
+            - type: REGEX
+              parameters:
+                - '(?m)^VOLT_VDD10\s*\|\s*([0-9]+(?:[.,][0-9]+)?)'
+                - \1
+            - type: STR_REPLACE
+              parameters:
+                - ','
+                - .
+          master_item:
+            key: ipmi.sensors
+        - uuid: 8cdd9216474d4c10a4298e1cf9658652
+          name: VOLT_VMISC
+          type: DEPENDENT
+          key: ipmi.volt_vmisc
+          history: 365d
+          value_type: FLOAT
+          units: V
+          preprocessing:
+            - type: REGEX
+              parameters:
+                - '(?m)^VOLT_VMISC\s*\|\s*([0-9]+(?:[.,][0-9]+)?)'
+                - \1
+            - type: STR_REPLACE
+              parameters:
+                - ','
+                - .
+          master_item:
+            key: ipmi.sensors
+        - uuid: fadcdc8a25094c8fab7e26b0a9c1a95f
+          name: VOLT_VSUS10
+          type: DEPENDENT
+          key: ipmi.volt_vsus10
+          history: 365d
+          value_type: FLOAT
+          units: V
+          preprocessing:
+            - type: REGEX
+              parameters:
+                - '(?m)^VOLT_VSUS10\s*\|\s*([0-9]+(?:[.,][0-9]+)?)'
+                - \1
+            - type: STR_REPLACE
+              parameters:
+                - ','
+                - .
+          master_item:
+            key: ipmi.sensors
